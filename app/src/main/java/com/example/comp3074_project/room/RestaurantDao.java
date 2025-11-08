@@ -26,4 +26,8 @@ public interface RestaurantDao {
     @Query("SELECT * FROM restaurant_table")
     List<Restaurant> getAllRestaurants();
 
+    @Query("SELECT * FROM restaurant_table WHERE restaurant_id = :restaurantId")
+    Restaurant getRestaurantById(int restaurantId);
+
+
 }
