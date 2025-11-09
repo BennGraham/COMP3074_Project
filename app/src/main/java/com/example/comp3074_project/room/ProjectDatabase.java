@@ -13,7 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {Restaurant.class, Tag.class, RestaurantTag.class}, version = 1, exportSchema = false)
-public class ProjectDatabase extends RoomDatabase {
+public abstract class ProjectDatabase extends RoomDatabase {
     private static final String DB_NAME = "ProjectDatabase";
 
     public abstract RestaurantDao restaurantDao();
