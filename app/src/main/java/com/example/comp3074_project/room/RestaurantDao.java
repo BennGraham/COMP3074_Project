@@ -29,5 +29,14 @@ public interface RestaurantDao {
     @Query("SELECT * FROM restaurant_table WHERE restaurant_id = :restaurantId")
     Restaurant getRestaurantById(int restaurantId);
 
+    @Query("SELECT * FROM restaurant_table WHERE name LIKE :searchQuery ORDER BY name ASC")
+    List<Restaurant> searchRestaurantsByNameQuery(String searchQuery);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertRestaurantTag(RestaurantTag restaurantTag);
+
+    @Query("DELETE FROM restaurant_tag_table WHERE restaurant_id = :restaurantId AND tag_id = :tagId")
+    void deleteRestaurantTag(long restaurantId, long tagId);
+
 
 }
