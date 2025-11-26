@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Restaurant.class, Tag.class, RestaurantTag.class, Rating.class}, version = 2, exportSchema = false)
+@Database(entities = {Restaurant.class, Tag.class, RestaurantTag.class, Rating.class}, version = 3, exportSchema = false)
 public abstract class ProjectDatabase extends RoomDatabase {
     private static final String DB_NAME = "ProjectDatabase";
 

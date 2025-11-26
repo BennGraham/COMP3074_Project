@@ -36,6 +36,9 @@ public class Restaurant {
     @ColumnInfo(name = "longitude")
     private double longitude;
 
+    @ColumnInfo(name = "display_image")
+    private string displayImage;
+
     public Restaurant(@NotNull String name, String description, @NotNull String address,
                       String phoneNumber, float rating, double latitude, double longitude) {
         this.name = name;
@@ -45,6 +48,7 @@ public class Restaurant {
         this.rating = rating;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.displayImage = displayImage;
     }
 
     public long getId() {
@@ -109,5 +113,13 @@ public class Restaurant {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public String getDisplayImage() {
+        return displayImage;
+    }
+
+    public void setDisplayImage(String displayImage) {
+        this.displayImage = displayImage;
     }
 }
