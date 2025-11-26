@@ -5,6 +5,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import java.util.List;
@@ -27,10 +28,10 @@ public interface RestaurantDao {
     List<Restaurant> getAllRestaurants();
 
     @Query("SELECT * FROM restaurant_table WHERE restaurant_id = :restaurantId")
-    Restaurant getRestaurantById(int restaurantId);
+    Restaurant getRestaurantById(long restaurantId);
 
     @Query("SELECT * FROM restaurant_table WHERE name LIKE :searchQuery ORDER BY name ASC")
-    List<Restaurant> searchRestaurantsByNameQuery(String searchQuery);
+    List<Restaurant> searchRestaurantsByName(String searchQuery);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertRestaurantTag(RestaurantTag restaurantTag);
@@ -38,5 +39,11 @@ public interface RestaurantDao {
     @Query("DELETE FROM restaurant_tag_table WHERE restaurant_id = :restaurantId AND tag_id = :tagId")
     void deleteRestaurantTag(long restaurantId, long tagId);
 
+    @Transaction // need to remember that this is required for querying relations
+    @Query("SELECT * FROM restaurant_table WHERE restaurant_id = :restaurantId")
+    RestaurantWithTags getRestaurantWithTags(long restaurantId);
 
+    @Transaction
+    @Query("SELECT * FROM restaurant_table ORDER BY name ASC")
+    List<RestaurantWithTags> getAllRestaurantsWithTags();
 }

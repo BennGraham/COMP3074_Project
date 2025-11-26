@@ -16,7 +16,7 @@ public class Tag {
     @ColumnInfo(name = "tag_name")
     private String tagName;
 
-    public Tag(@NotNull String taName) {
+    public Tag(@NotNull String tagName) {
         this.tagName = tagName;
     }
 

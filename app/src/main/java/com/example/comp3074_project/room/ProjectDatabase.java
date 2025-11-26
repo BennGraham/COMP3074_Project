@@ -12,12 +12,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Restaurant.class, Tag.class, RestaurantTag.class}, version = 1, exportSchema = false)
+@Database(entities = {Restaurant.class, Tag.class, RestaurantTag.class, Rating.class}, version = 2, exportSchema = false)
 public abstract class ProjectDatabase extends RoomDatabase {
     private static final String DB_NAME = "ProjectDatabase";
 
     public abstract RestaurantDao restaurantDao();
     public abstract TagDao tagDao();
+    public abstract RatingDao ratingDao();
 
     private static volatile ProjectDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
