@@ -9,7 +9,7 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/tvAppName"
+        android:id="@+id/appName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
@@ -20,22 +20,19 @@
         android:background="?attr/colorPrimary"
         android:textColor="@android:color/white" />
 
-    <com.google.android.material.textfield.TextInputLayout
+    <EditText
+        android:id="@+id/searchBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:hint="Search restaurants...">
+        android:autofillHints="false"
+        android:hint="Search restaurants..."
+        android:inputType="text"
+        android:imeOptions="actionSearch"
+        android:padding="12dp" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etSearch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:imeOptions="actionSearch" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewRestaurants"
+    <ListView
+        android:id="@+id/restaurantList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="8dp" />

@@ -37,7 +37,7 @@ public class Restaurant {
     private double longitude;
 
     @ColumnInfo(name = "display_image")
-    private string displayImage;
+    private String displayImage;
 
     public Restaurant(@NotNull String name, String description, @NotNull String address,
                       String phoneNumber, float rating, double latitude, double longitude) {
@@ -110,6 +110,7 @@ public class Restaurant {
     public double getLongitude() {
         return longitude;
     }
+    
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
