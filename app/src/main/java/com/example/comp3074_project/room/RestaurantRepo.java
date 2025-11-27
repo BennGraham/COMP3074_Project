@@ -40,9 +40,16 @@ public class RestaurantRepo {
         return allRestaurantsWithTags;
     }
 
-    public boolean insert(Restaurant restaurant) {
-        ProjectDatabase.databaseExecutor.execute(() -> restaurantDao.insert(restaurant));
-        return restaurant.getId() != -1;
+    public long insert(Restaurant restaurant) {
+        restaurantDao.insert(restaurant);
+        List<Restaurant> restaurants = restaurantDao.getAllRestaurants();
+        for (Restaurant r : restaurants) {
+            if (r.getName().equals(restaurant.getName()) &&
+                    r.getAddress().equals(restaurant.getAddress())) {
+                return r.getId();
+            }
+        }
+        return -1;
     }
 
     public boolean update(Restaurant restaurant) {
@@ -98,18 +105,14 @@ public class RestaurantRepo {
     }
 
     public boolean addTagToRestaurant(long restaurantId, String tagName) {
-        try {
-            ProjectDatabase.databaseExecutor.execute(() -> {
-                long tagId = tagDao.getTagIdByName(tagName);
-                if (tagId == 0) {
-                    Tag newTag = new Tag(tagName);
-                    tagDao.insert(newTag);
-                    tagId = tagDao.getTagIdByName(tagName);
-                }
-                restaurantDao.insertRestaurantTag(new RestaurantTag(restaurantId, tagId));
-            });
-            return true;
-        } catch (Throwable e) { return false; }
+        long tagId = tagDao.getTagIdByName(tagName);
+        if (tagId == 0) {
+            Tag newTag = new Tag(tagName);
+            tagDao.insert(newTag);
+            tagId = tagDao.getTagIdByName(tagName);
+        }
+        restaurantDao.insertRestaurantTag(new RestaurantTag(restaurantId, tagId));
+        return true;
     }
 
     public boolean removeTagFromRestaurant(long restaurantId, long tagId) {

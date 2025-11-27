@@ -3,13 +3,17 @@ package com.example.comp3074_project;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -26,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private RestaurantAdapter adapter;
     private RestaurantRepo restaurantRepo;
     private EditText searchBar;
+    private Button addRestaurantButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +74,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Load all restaurants
+        addRestaurantButton = findViewById(R.id.addRestaurantButton);
+        addRestaurantButton.setOnClickListener(v -> showAddRestaurantDialog());
+
         loadRestaurants();
     }
 
@@ -86,5 +93,69 @@ public class MainActivity extends AppCompatActivity {
             List<Restaurant> filtered = restaurantRepo.searchRestaurantsByName(searchQuery);
             adapter.setRestaurants(filtered);
         }
+    }
+
+    private void showAddRestaurantDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.add_restaurant_dialog, null);
+        builder.setView(dialogView);
+
+        EditText etName = dialogView.findViewById(R.id.dialogName);
+        EditText etAddress = dialogView.findViewById(R.id.etAddress);
+        EditText etPhone = dialogView.findViewById(R.id.etPhone);
+        EditText etDescription = dialogView.findViewById(R.id.etDescription);
+        RatingBar ratingBar = dialogView.findViewById(R.id.ratingBar);
+        EditText etTags = dialogView.findViewById(R.id.dialogTags);
+
+        builder.setTitle("Add Restaurant");
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            String name = etName.getText().toString().trim();
+            String address = etAddress.getText().toString().trim();
+
+            if (name.isEmpty() || address.isEmpty()) {
+                Toast.makeText(this, "Name and Address are required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String phone = etPhone.getText().toString().trim();
+            String description = etDescription.getText().toString().trim();
+            float rating = ratingBar.getRating();
+            String tagsInput = etTags.getText().toString().trim();
+
+            Restaurant restaurant = new Restaurant(
+                    name,
+                    description,
+                    address,
+                    phone,
+                    rating,
+                    0.0,
+                    0.0
+            );
+
+            long restaurantId = restaurantRepo.insert(restaurant);
+
+            if (restaurantId != -1) {
+                if (!tagsInput.isEmpty()) {
+                    String[] tags = tagsInput.split(",");
+                    for (String tag : tags) {
+                        String tagName = tag.trim();
+                        if (!tagName.isEmpty()) {
+                            restaurantRepo.addTagToRestaurant(restaurantId, tagName);
+                        }
+                    }
+                }
+
+                loadRestaurants();
+                Toast.makeText(this, "Restaurant added", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Failed to add restaurant", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
