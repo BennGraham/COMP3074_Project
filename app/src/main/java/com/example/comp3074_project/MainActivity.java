@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private RestaurantRepo restaurantRepo;
     private EditText searchBar;
     private Button addRestaurantButton;
+    private Button aboutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,12 @@ public class MainActivity extends AppCompatActivity {
 
         addRestaurantButton = findViewById(R.id.addRestaurantButton);
         addRestaurantButton.setOnClickListener(v -> showAddRestaurantDialog());
+
+        aboutButton = findViewById(R.id.aboutButton);
+        aboutButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+            startActivity(intent);
+        });
 
         loadRestaurants();
     }
