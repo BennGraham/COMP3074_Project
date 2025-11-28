@@ -1,5 +1,6 @@
 package com.example.comp3074_project;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -53,8 +54,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Restaurant restaurant = (Restaurant) parent.getItemAtPosition(position);
-                // TODO: open detials on press
-                Toast.makeText(MainActivity.this, "Clicked: " + restaurant.getName(), Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+                intent.putExtra("RESTAURANT_ID", restaurant.getId());
+                startActivity(intent);
             }
         });
 
