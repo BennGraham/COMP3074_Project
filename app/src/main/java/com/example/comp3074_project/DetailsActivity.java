@@ -7,11 +7,13 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.comp3074_project.room.Restaurant;
 import com.example.comp3074_project.room.RestaurantRepo;
 import com.example.comp3074_project.room.RestaurantWithTags;
 import com.example.comp3074_project.room.Tag;
+import com.google.android.material.chip.Chip;
 
 public class DetailsActivity extends AppCompatActivity {
 
@@ -70,10 +72,19 @@ public class DetailsActivity extends AppCompatActivity {
 
         if (restaurantWithTags.tags != null && !restaurantWithTags.tags.isEmpty()) {
             for (Tag tag : restaurantWithTags.tags) {
-                TextView tagView = new TextView(this);
-                tagView.setText(tag.getTagName());
+                Chip chip = new Chip(this);
+                chip.setText(tag.getTagName());
+                chip.setChipBackgroundColorResource(android.R.color.darker_gray);
+                chip.setTextColor(ContextCompat.getColor(this, android.R.color.black));
 
-                tagsContainer.addView(tagView);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                params.setMargins(0, 0, 8, 8);
+                chip.setLayoutParams(params);
+
+                tagsContainer.addView(chip);
             }
         }
     }
