@@ -1,6 +1,8 @@
 package com.example.comp3074_project;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -96,5 +98,22 @@ public class DetailsActivity extends AppCompatActivity {
                 tagsContainer.addView(chip);
             }
         }
+
+        Button shareButton = findViewById(R.id.detailsBtnShare);
+        shareButton.setOnClickListener(v -> {
+            String shareText = "Check out this restaurant!\n\n"
+                    + "Name: " + restaurant.getName() + "\n"
+                    + "Address: " + restaurant.getAddress() + "\n"
+                    + "Phone: " + restaurant.getPhoneNumber() + "\n"
+                    + "Rating: " + restaurant.getRating() + "/5\n\n"
+                    + "Description: " + restaurant.getDescription();
+
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Check out this restaurant: " + restaurant.getName());
+            intent.putExtra(Intent.EXTRA_TEXT, shareText);
+
+            startActivity(Intent.createChooser(intent, "Share via"));
+        });
     }
 }
