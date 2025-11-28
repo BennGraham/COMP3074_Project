@@ -35,8 +35,9 @@
                 android:layout_height="wrap_content"
                 android:text="Favourite"
                 android:layout_marginEnd="8dp"
-                style="@android:style/Widget.Material.Button.Borderless"
-                android:textColor="@android:color/white" />
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:textColor="@android:color/white"
+                />
 
             <Button
                 android:id="@+id/detailsBtnGetDirections"
@@ -44,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:text="Directions"
                 android:layout_marginEnd="8dp"
-                style="@android:style/Widget.Material.Button.Borderless"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:textColor="@android:color/white" />
 
             <Button
@@ -52,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Share"
-                style="@android:style/Widget.Material.Button.Borderless"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:textColor="@android:color/white" />
 
         </LinearLayout>
