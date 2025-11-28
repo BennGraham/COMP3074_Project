@@ -25,6 +25,7 @@ public class RestaurantRepo {
     }
 
     public List<Restaurant> getAllRestaurants() {
+        allRestaurants = restaurantDao.getAllRestaurants();
         return allRestaurants;
     }
 
