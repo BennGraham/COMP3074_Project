@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadRestaurants() {
-        List<Restaurant> restaurants = restaurantRepo.restaurantDao.getAllRestaurants();
+        List<Restaurant> restaurants = restaurantRepo.getAllRestaurants();
         adapter.setRestaurants(restaurants);
     }
 
