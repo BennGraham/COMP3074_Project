@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.LiveData;
 
 import com.example.comp3074_project.room.Restaurant;
 import com.example.comp3074_project.room.RestaurantRepo;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText searchBar;
     private Button addRestaurantButton;
     private Button aboutButton;
+    private LiveData<List<Restaurant>> restaurantList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,17 +93,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadRestaurants() {
-        List<Restaurant> restaurants = restaurantRepo.getAllRestaurants();
-        adapter.setRestaurants(restaurants);
+        if (restaurantList != null) {
+            restaurantList.removeObservers(this);
+        }
+        restaurantList = restaurantRepo.getAllRestaurants();
+        restaurantList.observe(this, restaurants -> adapter.setRestaurants(restaurants));
     }
 
     private void filterRestaurants(String query) {
+        if (restaurantList != null) {
+            restaurantList.removeObservers(this);
+        }
+
         if (query.isEmpty()) {
             loadRestaurants();
         } else {
             String searchQuery = "%" + query + "%";
-            List<Restaurant> filtered = restaurantRepo.searchRestaurantsByName(searchQuery);
-            adapter.setRestaurants(filtered);
+            restaurantList = restaurantRepo.searchRestaurantsByName(searchQuery);
+            restaurantList.observe(this, restaurants -> adapter.setRestaurants(restaurants));
         }
     }
 
@@ -143,24 +152,8 @@ public class MainActivity extends AppCompatActivity {
                     0.0
             );
 
-            long restaurantId = restaurantRepo.insert(restaurant);
-
-            if (restaurantId != -1) {
-                if (!tagsInput.isEmpty()) {
-                    String[] tags = tagsInput.split(",");
-                    for (String tag : tags) {
-                        String tagName = tag.trim();
-                        if (!tagName.isEmpty()) {
-                            restaurantRepo.addTagToRestaurant(restaurantId, tagName);
-                        }
-                    }
-                }
-
-                loadRestaurants();
-                Toast.makeText(this, "Restaurant added", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Failed to add restaurant", Toast.LENGTH_SHORT).show();
-            }
+            restaurantRepo.insert(restaurant, tagsInput);
+            Toast.makeText(this, "Restaurant added", Toast.LENGTH_SHORT).show();
         });
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
