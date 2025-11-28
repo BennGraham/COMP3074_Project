@@ -48,8 +48,10 @@ public class Restaurant {
         this.rating = rating;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.displayImage = displayImage;
+        this.displayImage = null; // todo: add display image, keep null for now
     }
+
+    public Restaurant() {}
 
     public long getId() {
         return id;
