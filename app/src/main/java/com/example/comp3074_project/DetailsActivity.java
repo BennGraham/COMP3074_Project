@@ -1,6 +1,8 @@
 package com.example.comp3074_project;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     private RestaurantRepo restaurantRepo;
     private long restaurantId;
+    private Restaurant restaurant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,14 @@ public class DetailsActivity extends AppCompatActivity {
 
         restaurantRepo = new RestaurantRepo(getApplication());
         loadRestaurantData();
+
+        Button detailsBtnGetDirections = findViewById(R.id.detailsBtnGetDirections);
+        detailsBtnGetDirections.setOnClickListener(v -> {
+            if (restaurant != null) {
+                Intent intent = new Intent(DetailsActivity.this, NavigationActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void loadRestaurantData() {
@@ -45,7 +56,7 @@ public class DetailsActivity extends AppCompatActivity {
             return;
         }
 
-        Restaurant restaurant = restaurantWithTags.restaurant;
+        restaurant = restaurantWithTags.restaurant;
         TextView detailsName = findViewById(R.id.detailsRestaurantName);
         detailsName.setText(restaurant.getName());
         RatingBar ratingBar = findViewById(R.id.detailsRatingBar);
