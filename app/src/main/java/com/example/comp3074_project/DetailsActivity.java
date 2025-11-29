@@ -10,6 +10,9 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.example.comp3074_project.room.Restaurant;
 import com.example.comp3074_project.room.RestaurantRepo;
@@ -28,6 +31,12 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_details);
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.header_container), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(v.getPaddingLeft(), systemBars.top, v.getPaddingRight(), v.getPaddingBottom());
+            return insets;
+        });
 
         restaurantId = getIntent().getLongExtra("RESTAURANT_ID", -1);
 
@@ -101,5 +110,22 @@ public class DetailsActivity extends AppCompatActivity {
                 tagsContainer.addView(chip);
             }
         }
+
+        Button shareButton = findViewById(R.id.detailsBtnShare);
+        shareButton.setOnClickListener(v -> {
+            String shareText = "Check out this restaurant!\n\n"
+                    + "Name: " + restaurant.getName() + "\n"
+                    + "Address: " + restaurant.getAddress() + "\n"
+                    + "Phone: " + restaurant.getPhoneNumber() + "\n"
+                    + "Rating: " + restaurant.getRating() + "/5\n\n"
+                    + "Description: " + restaurant.getDescription();
+
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Check out this restaurant: " + restaurant.getName());
+            intent.putExtra(Intent.EXTRA_TEXT, shareText);
+
+            startActivity(Intent.createChooser(intent, "Share via"));
+        });
     }
 }

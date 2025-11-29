@@ -1,5 +1,6 @@
 package com.example.comp3074_project.room;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -13,7 +14,7 @@ import java.util.List;
 @Dao
 public interface RestaurantDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insert(Restaurant restaurant);
+    long insert(Restaurant restaurant);
 
     @Update
     void update(Restaurant restaurant);
@@ -24,14 +25,14 @@ public interface RestaurantDao {
     @Query("DELETE FROM restaurant_table")
     void deleteAllRestaurants();
 
-    @Query("SELECT * FROM restaurant_table")
-    List<Restaurant> getAllRestaurants();
+    @Query("SELECT * FROM restaurant_table ORDER BY name ASC")
+    LiveData<List<Restaurant>> getAllRestaurants();
 
     @Query("SELECT * FROM restaurant_table WHERE restaurant_id = :restaurantId")
     Restaurant getRestaurantById(long restaurantId);
 
     @Query("SELECT * FROM restaurant_table WHERE name LIKE :searchQuery ORDER BY name ASC")
-    List<Restaurant> searchRestaurantsByName(String searchQuery);
+    LiveData<List<Restaurant>> searchRestaurantsByName(String searchQuery);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertRestaurantTag(RestaurantTag restaurantTag);

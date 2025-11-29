@@ -2,6 +2,8 @@ package com.example.comp3074_project.room;
 
 import android.app.Application;
 
+import androidx.lifecycle.LiveData;
+
 import java.util.List;
 
 public class RestaurantRepo {
@@ -9,7 +11,7 @@ public class RestaurantRepo {
     private TagDao tagDao;
     private RatingDao ratingDao;
 
-    private List<Restaurant> allRestaurants;
+    private LiveData<List<Restaurant>> allRestaurants;
     private List<Tag> allTags;
     private List<RestaurantWithTags> allRestaurantsWithTags;
 
@@ -24,8 +26,7 @@ public class RestaurantRepo {
         allRestaurantsWithTags = restaurantDao.getAllRestaurantsWithTags();
     }
 
-    public List<Restaurant> getAllRestaurants() {
-        allRestaurants = restaurantDao.getAllRestaurants();
+    public LiveData<List<Restaurant>> getAllRestaurants() {
         return allRestaurants;
     }
 
@@ -41,16 +42,21 @@ public class RestaurantRepo {
         return allRestaurantsWithTags;
     }
 
-    public long insert(Restaurant restaurant) {
-        restaurantDao.insert(restaurant);
-        List<Restaurant> restaurants = restaurantDao.getAllRestaurants();
-        for (Restaurant r : restaurants) {
-            if (r.getName().equals(restaurant.getName()) &&
-                    r.getAddress().equals(restaurant.getAddress())) {
-                return r.getId();
+    public void insert(Restaurant restaurant, String tagsInput) {
+        ProjectDatabase.databaseExecutor.execute(() -> {
+            long restaurantId = restaurantDao.insert(restaurant);
+            if (restaurantId != -1) {
+                if (tagsInput != null && !tagsInput.isEmpty()) {
+                    String[] tags = tagsInput.split(",");
+                    for (String tag : tags) {
+                        String tagName = tag.trim();
+                        if (!tagName.isEmpty()) {
+                            addTagToRestaurant(restaurantId, tagName);
+                        }
+                    }
+                }
             }
-        }
-        return -1;
+        });
     }
 
     public boolean update(Restaurant restaurant) {
@@ -80,7 +86,7 @@ public class RestaurantRepo {
         }
     }
 
-    public List<Restaurant> searchRestaurantsByName(String searchQuery) {
+    public LiveData<List<Restaurant>> searchRestaurantsByName(String searchQuery) {
         return restaurantDao.searchRestaurantsByName(searchQuery);
     }
 
@@ -106,13 +112,15 @@ public class RestaurantRepo {
     }
 
     public boolean addTagToRestaurant(long restaurantId, String tagName) {
-        long tagId = tagDao.getTagIdByName(tagName);
-        if (tagId == 0) {
-            Tag newTag = new Tag(tagName);
-            tagDao.insert(newTag);
-            tagId = tagDao.getTagIdByName(tagName);
-        }
-        restaurantDao.insertRestaurantTag(new RestaurantTag(restaurantId, tagId));
+        ProjectDatabase.databaseExecutor.execute(() -> {
+            long tagId = tagDao.getTagIdByName(tagName);
+            if (tagId == 0) {
+                Tag newTag = new Tag(tagName);
+                tagDao.insert(newTag);
+                tagId = tagDao.getTagIdByName(tagName);
+            }
+            restaurantDao.insertRestaurantTag(new RestaurantTag(restaurantId, tagId));
+        });
         return true;
     }
 
