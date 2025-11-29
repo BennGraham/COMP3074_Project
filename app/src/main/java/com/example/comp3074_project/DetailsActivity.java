@@ -43,6 +43,9 @@ public class DetailsActivity extends AppCompatActivity {
         detailsBtnGetDirections.setOnClickListener(v -> {
             if (restaurant != null) {
                 Intent intent = new Intent(DetailsActivity.this, NavigationActivity.class);
+                intent.putExtra(NavigationActivity.EXTRA_LATITUDE, restaurant.getLatitude());
+                intent.putExtra(NavigationActivity.EXTRA_LONGITUDE, restaurant.getLongitude());
+                intent.putExtra(NavigationActivity.EXTRA_LABEL, restaurant.getName());
                 startActivity(intent);
             }
         });

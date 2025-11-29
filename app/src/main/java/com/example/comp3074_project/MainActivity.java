@@ -1,6 +1,8 @@
 package com.example.comp3074_project;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,6 +25,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.comp3074_project.room.Restaurant;
 import com.example.comp3074_project.room.RestaurantRepo;
 
+import java.io.IOException;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -128,6 +131,20 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
+            Geocoder geocoder = new Geocoder(this);
+            double latitude = 0.0;
+            double longitude = 0.0;
+
+            try {
+                List<Address> addresses = geocoder.getFromLocationName(address, 1);
+                if (addresses != null && !addresses.isEmpty()) {
+                    latitude = addresses.get(0).getLatitude();
+                    longitude = addresses.get(0).getLongitude();
+                }
+            } catch (IOException e) {
+                // todo
+            }
+
             String phone = etPhone.getText().toString().trim();
             String description = etDescription.getText().toString().trim();
             float rating = ratingBar.getRating();
@@ -139,8 +156,8 @@ public class MainActivity extends AppCompatActivity {
                     address,
                     phone,
                     rating,
-                    0.0,
-                    0.0
+                    latitude,
+                    longitude
             );
 
             long restaurantId = restaurantRepo.insert(restaurant);
