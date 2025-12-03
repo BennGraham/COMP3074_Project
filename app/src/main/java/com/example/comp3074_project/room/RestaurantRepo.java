@@ -170,4 +170,8 @@ public class RestaurantRepo {
             return false;
         }
     }
+
+    public LiveData<List<Restaurant>> searchRestaurantsByNameOrTag(String query) {
+        return restaurantDao.searchRestaurantsByNameOrTag(query);
+    }
 }

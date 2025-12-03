@@ -47,4 +47,11 @@ public interface RestaurantDao {
     @Transaction
     @Query("SELECT * FROM restaurant_table ORDER BY name ASC")
     List<RestaurantWithTags> getAllRestaurantsWithTags();
+
+    @Query("SELECT DISTINCT r.* FROM restaurant_table r " +
+            "LEFT JOIN restaurant_tag_table rt ON r.restaurant_id = rt.restaurant_id " +
+            "LEFT JOIN tag_table t ON rt.tag_id = t.tag_id " +
+            "WHERE r.name LIKE :query OR t.tag_name LIKE :query " +
+            "ORDER BY r.name ASC")
+    LiveData<List<Restaurant>> searchRestaurantsByNameOrTag(String query);
 }

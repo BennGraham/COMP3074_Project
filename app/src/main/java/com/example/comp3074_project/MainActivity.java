@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             loadRestaurants();
         } else {
             String searchQuery = "%" + query + "%";
-            restaurantList = restaurantRepo.searchRestaurantsByName(searchQuery);
+            restaurantList = restaurantRepo.searchRestaurantsByNameOrTag(searchQuery);
             restaurantList.observe(this, restaurants -> adapter.setRestaurants(restaurants));
         }
     }
