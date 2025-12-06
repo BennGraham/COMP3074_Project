@@ -58,7 +58,18 @@ public class DetailsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Button detailsBtnFavourite = findViewById(R.id.detailsBtnFavourite);
+        updateFavouriteButton(detailsBtnFavourite, restaurant.getFavourite());
+
+        detailsBtnFavourite.setOnClickListener(v -> {
+            boolean newFavorite = !restaurant.getFavourite();
+            restaurant.setFavourite(newFavorite);
+            restaurantRepo.toggleFavourite(restaurantId, newFavorite);
+            updateFavouriteButton(detailsBtnFavourite, newFavorite);
+        });
     }
+
 
     private void loadRestaurantData() {
         RestaurantWithTags restaurantWithTags = restaurantRepo.getRestaurantWithTagsById(restaurantId);
@@ -127,5 +138,13 @@ public class DetailsActivity extends AppCompatActivity {
 
             startActivity(Intent.createChooser(intent, "Share via"));
         });
+    }
+
+    private void updateFavouriteButton(Button button, boolean isFavourite) {
+        if (isFavourite) {
+            button.setText("Unfavourite");
+        } else {
+            button.setText("Favourite");
+        }
     }
 }

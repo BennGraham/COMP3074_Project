@@ -36,8 +36,8 @@ public class Restaurant {
     @ColumnInfo(name = "longitude")
     private double longitude;
 
-    @ColumnInfo(name = "display_image")
-    private String displayImage;
+    @ColumnInfo(name = "is_favourite", defaultValue = "0")
+    private boolean favourite;
 
     public Restaurant(@NotNull String name, String description, @NotNull String address,
                       String phoneNumber, float rating, double latitude, double longitude) {
@@ -48,7 +48,6 @@ public class Restaurant {
         this.rating = rating;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.displayImage = null; // todo: add display image, keep null for now
     }
 
     public Restaurant() {}
@@ -118,11 +117,11 @@ public class Restaurant {
         this.longitude = longitude;
     }
 
-    public String getDisplayImage() {
-        return displayImage;
+    public boolean getFavourite() {
+        return favourite;
     }
 
-    public void setDisplayImage(String displayImage) {
-        this.displayImage = displayImage;
+    public void setFavourite(boolean favourite) {
+        this.favourite = favourite;
     }
 }

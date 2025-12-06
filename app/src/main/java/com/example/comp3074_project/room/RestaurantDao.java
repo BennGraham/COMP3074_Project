@@ -28,11 +28,23 @@ public interface RestaurantDao {
     @Query("SELECT * FROM restaurant_table ORDER BY name ASC")
     LiveData<List<Restaurant>> getAllRestaurants();
 
+    @Transaction
+    @Query("SELECT * FROM restaurant_table ORDER BY name ASC")
+    LiveData<List<RestaurantWithTags>> getAllRestaurantsWithTagsLive();
+
     @Query("SELECT * FROM restaurant_table WHERE restaurant_id = :restaurantId")
     Restaurant getRestaurantById(long restaurantId);
 
     @Query("SELECT * FROM restaurant_table WHERE name LIKE :searchQuery ORDER BY name ASC")
     LiveData<List<Restaurant>> searchRestaurantsByName(String searchQuery);
+
+    @Transaction
+    @Query("SELECT DISTINCT r.* FROM restaurant_table r " +
+            "LEFT JOIN restaurant_tag_table rt ON r.restaurant_id = rt.restaurant_id " +
+            "LEFT JOIN tag_table t ON rt.tag_id = t.tag_id " +
+            "WHERE r.name LIKE :query OR t.tag_name LIKE :query " +
+            "ORDER BY r.name ASC")
+    LiveData<List<RestaurantWithTags>> searchRestaurantsWithTagsByNameOrTag(String query);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertRestaurantTag(RestaurantTag restaurantTag);

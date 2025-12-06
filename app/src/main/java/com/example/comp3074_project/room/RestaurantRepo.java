@@ -30,6 +30,10 @@ public class RestaurantRepo {
         return allRestaurants;
     }
 
+    public LiveData<List<RestaurantWithTags>> getAllRestaurantsWithTagsLive() {
+        return restaurantDao.getAllRestaurantsWithTagsLive();
+    }
+
     public Restaurant getRestaurantById(long restaurantId) {
         return restaurantDao.getRestaurantById(restaurantId);
     }
@@ -173,5 +177,20 @@ public class RestaurantRepo {
 
     public LiveData<List<Restaurant>> searchRestaurantsByNameOrTag(String query) {
         return restaurantDao.searchRestaurantsByNameOrTag(query);
+    }
+
+    public LiveData<List<RestaurantWithTags>> searchRestaurantsWithTagsByNameOrTag(String query)
+    {
+        return restaurantDao.searchRestaurantsWithTagsByNameOrTag(query);
+    }
+
+    public void toggleFavourite(long restaurantId, boolean isFavourite) {
+        ProjectDatabase.databaseExecutor.execute(() -> {
+            Restaurant restaurant = restaurantDao.getRestaurantById(restaurantId);
+            if (restaurant != null) {
+                restaurant.setFavourite(isFavourite);
+                restaurantDao.update(restaurant);
+            }
+        });
     }
 }

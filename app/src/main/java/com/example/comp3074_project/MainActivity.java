@@ -25,6 +25,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.comp3074_project.room.Restaurant;
 import com.example.comp3074_project.room.RestaurantRepo;
+import com.example.comp3074_project.room.RestaurantWithTags;
 
 import java.io.IOException;
 import java.util.List;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText searchBar;
     private Button addRestaurantButton;
     private Button aboutButton;
-    private LiveData<List<Restaurant>> restaurantList;
+    private LiveData<List<RestaurantWithTags>> restaurantList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +60,10 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Restaurant restaurant = (Restaurant) parent.getItemAtPosition(position);
+                RestaurantWithTags item = (RestaurantWithTags) parent.getItemAtPosition(position);
 
                 Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-                intent.putExtra("RESTAURANT_ID", restaurant.getId());
+                intent.putExtra("RESTAURANT_ID", item.getRestaurant().getId());
                 startActivity(intent);
             }
         });
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         if (restaurantList != null) {
             restaurantList.removeObservers(this);
         }
-        restaurantList = restaurantRepo.getAllRestaurants();
+        restaurantList = restaurantRepo.getAllRestaurantsWithTagsLive();
         restaurantList.observe(this, restaurants -> adapter.setRestaurants(restaurants));
     }
 
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             loadRestaurants();
         } else {
             String searchQuery = "%" + query + "%";
-            restaurantList = restaurantRepo.searchRestaurantsByNameOrTag(searchQuery);
+            restaurantList = restaurantRepo.searchRestaurantsWithTagsByNameOrTag(searchQuery);
             restaurantList.observe(this, restaurants -> adapter.setRestaurants(restaurants));
         }
     }
