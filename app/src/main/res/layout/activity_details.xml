@@ -13,47 +13,66 @@
         android:background="@android:color/black"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/detailsRestaurantName"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Restaurant Name"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            android:layout_marginBottom="16dp" />
+            android:background="@android:color/black"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+            <TextView
+                android:id="@+id/detailsRestaurantName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/app_name"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white" />
+            <Button
+                android:id="@+id/detailsBtnEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:text="Edit"
+                android:textSize="16sp" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="start"
             android:layout_marginBottom="16dp">
 
             <Button
                 android:id="@+id/detailsBtnFavourite"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Favourite"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="4dp"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:textColor="@android:color/white"
                 />
 
             <Button
                 android:id="@+id/detailsBtnGetDirections"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Directions"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="4dp"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:textColor="@android:color/white" />
 
             <Button
                 android:id="@+id/detailsBtnShare"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Share"
+                android:layout_marginEnd="4dp"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:textColor="@android:color/white" />
 
@@ -66,19 +85,40 @@
             android:textSize="14sp"
             android:layout_marginBottom="8dp" />
 
-        <HorizontalScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="none">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-            <LinearLayout
-                android:id="@+id/detailsTags"
+            <HorizontalScrollView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/detailsTags"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="start" />
+
+            </HorizontalScrollView>
+
+            <Button
+                android:id="@+id/detailsBtnAddTag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="start" />
+                android:text="+ Tag"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:textColor="@android:color/white" />
 
-        </HorizontalScrollView>
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -99,8 +139,8 @@
                 android:layout_height="wrap_content"
                 android:numStars="5"
                 android:rating="0"
-                android:stepSize="0.1"
-                android:isIndicator="true"
+                android:stepSize="1"
+                android:isIndicator="false"
                 android:layout_marginBottom="16dp" />
 
             <TextView

@@ -104,6 +104,12 @@ public class MainActivity extends AppCompatActivity {
         restaurantList.observe(this, restaurants -> adapter.setRestaurants(restaurants));
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadRestaurants();
+    }
+
     private void filterRestaurants(String query) {
         if (restaurantList != null) {
             restaurantList.removeObservers(this);
